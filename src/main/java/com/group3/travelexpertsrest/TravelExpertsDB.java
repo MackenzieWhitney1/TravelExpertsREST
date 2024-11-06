@@ -7,9 +7,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
 import model.Agent;
-import model.CustomersReward;
 import model.Reward;
-import org.hibernate.Hibernate;
 
 import java.io.FileInputStream;
 import java.io.IOException;
