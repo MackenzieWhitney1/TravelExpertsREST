@@ -5,11 +5,11 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/hello-world")
-public class HelloResource {
+@Path("/rewards")
+public class RewardResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String hello() {
-        return TravelExpertsDB.getAgents();
+    public String getRewards() {
+        return TravelExpertsDB.getRewards();
     }
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
 import model.Agent;
+import model.Reward;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class TravelExpertsDB {
             map.put("hibernate.dialect", props.getProperty("DB_DIALECT"));
         } catch (IOException e) {
             throw new RuntimeException("Problem with reading connection info: " + e.getMessage());
-        } //end getConnection
+        }
         System.out.println(props);
         System.out.println(map);
         return Persistence.createEntityManagerFactory("TravelExpertsDB", map);
@@ -46,4 +47,24 @@ public class TravelExpertsDB {
         Type listType = new TypeToken<List<Agent>>(){}.getType();
         return gson.toJson(agentlist, listType);
     }
+    public static String getRewards() {
+        EntityManagerFactory emf = createFactory();
+        EntityManager em = emf.createEntityManager();
+        Query q = em.createQuery("select r from Reward r");
+        List<Reward> rewardlist = q.getResultList();
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<Reward>>(){}.getType();
+        return gson.toJson(rewardlist, listType);
+    }
+
+    public static String getCustomerRewardsById(int customerId) {
+        EntityManagerFactory emf = createFactory();
+        EntityManager em = emf.createEntityManager();
+        Query q = em.createQuery("select c.id.customerId, c.id.rewardId, c.rwdNumber from CustomersReward c where c.customer.id = :customerId");
+        q.setParameter("customerId", customerId);
+        List customerRewardList = q.getResultList();
+        Gson gson = new Gson();
+        return gson.toJson(customerRewardList);
+    }
+
 }
