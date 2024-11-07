@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 //import java.time.Instant;
+import java.math.RoundingMode;
 import java.sql.Date;
 
 @Entity
@@ -79,7 +80,7 @@ public class Package {
     }
 
     public BigDecimal getPkgBasePrice() {
-        return pkgBasePrice;
+        return pkgBasePrice.setScale(2, RoundingMode.HALF_UP);
     }
 
     public void setPkgBasePrice(BigDecimal pkgBasePrice) {
@@ -87,7 +88,7 @@ public class Package {
     }
 
     public BigDecimal getPkgAgencyCommission() {
-        return pkgAgencyCommission;
+        return pkgAgencyCommission.setScale(2, RoundingMode.HALF_UP);
     }
 
     public void setPkgAgencyCommission(BigDecimal pkgAgencyCommission) {

@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,71 +69,4 @@ public class TravelExpertsDB {
         Gson gson = new Gson();
         return gson.toJson(customerRewardList);
     }
-
-    public static String getPackages() {
-        try (EntityManagerFactory entityManagerFactory = createFactory();
-             EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-
-            // Query to retrieve the packages
-            TypedQuery<model.Package> query = entityManager.createQuery("select p from Package p", model.Package.class);
-            List<model.Package> packages = query.getResultList();
-
-            // Convert the list of packages to JSON
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<Package>>() {}.getType();
-            jsonResult = gson.toJson(packages, type);
-
-        } catch (Exception e) {
-            // Handle exceptions (e.g., logging)
-            throw new RuntimeException(e);
-        }
-
-        return jsonResult;
-    }
-
-    public static String getPackageById(int packageId) {
-        try (EntityManagerFactory entityManagerFactory = createFactory();
-             EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-
-            Package pkg = entityManager.find(Package.class, packageId);
-
-            Gson gson = new Gson();
-            jsonResult = gson.toJson(pkg);
-        } catch (Exception e) {
-            // Handle exceptions (e.g., logging)
-            throw new RuntimeException(e);
-        }
-
-        return jsonResult;
-    }
-
-    public static String addPackages(String jsonString) {
-        try (EntityManagerFactory entityManagerFactory = createFactory();
-             EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-
-            // Set up Gson with a custom date format to handle dates in JSON
-            Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
-            Package pkg = gson.fromJson(jsonString, Package.class);
-
-            entityManager.getTransaction().begin();
-            entityManager.persist(pkg);
-            entityManager.getTransaction().commit();
-
-            // Access the generated ID
-            Integer packageId = pkg.getId();
-
-            result.addProperty("msg", "Package successfully created.");
-            result.addProperty("id", packageId);
-
-            jsonResult = gson.toJson(result);
-
-        } catch (Exception e) {
-            // Handle exceptions (e.g., logging)
-            jsonResult = "{ \"msg\": \"Package creation failed\" }";
-            throw new RuntimeException(e);
-        }
-
-        return jsonResult;
-    }
-
 }
