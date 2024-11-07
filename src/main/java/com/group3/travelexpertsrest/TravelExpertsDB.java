@@ -1,12 +1,12 @@
 package com.group3.travelexpertsrest;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.Query;
+import jakarta.persistence.*;
 import model.Agent;
+import model.Package;
 import model.Reward;
 
 import java.io.FileInputStream;
@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Properties;
 
 public class TravelExpertsDB {
+    private static String jsonResult = null;
+    private static JsonObject result = new JsonObject();
     public static EntityManagerFactory createFactory() {
         Properties props = new Properties();
         Map<String,String> map = new HashMap<>();
@@ -65,6 +67,72 @@ public class TravelExpertsDB {
         List customerRewardList = q.getResultList();
         Gson gson = new Gson();
         return gson.toJson(customerRewardList);
+    }
+
+    public static String getPackages() {
+        try (EntityManagerFactory entityManagerFactory = createFactory();
+             EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+
+            // Query to retrieve the packages
+            TypedQuery<model.Package> query = entityManager.createQuery("select p from Package p", model.Package.class);
+            List<model.Package> packages = query.getResultList();
+
+            // Convert the list of packages to JSON
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Package>>() {}.getType();
+            jsonResult = gson.toJson(packages, type);
+
+        } catch (Exception e) {
+            // Handle exceptions (e.g., logging)
+            throw new RuntimeException(e);
+        }
+
+        return jsonResult;
+    }
+
+    public static String getPackageById(int packageId) {
+        try (EntityManagerFactory entityManagerFactory = createFactory();
+             EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+
+            Package pkg = entityManager.find(Package.class, packageId);
+
+            Gson gson = new Gson();
+            jsonResult = gson.toJson(pkg);
+        } catch (Exception e) {
+            // Handle exceptions (e.g., logging)
+            throw new RuntimeException(e);
+        }
+
+        return jsonResult;
+    }
+
+    public static String addPackages(String jsonString) {
+        try (EntityManagerFactory entityManagerFactory = createFactory();
+             EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+
+            // Set up Gson with a custom date format to handle dates in JSON
+            Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
+            Package pkg = gson.fromJson(jsonString, Package.class);
+
+            entityManager.getTransaction().begin();
+            entityManager.persist(pkg);
+            entityManager.getTransaction().commit();
+
+            // Access the generated ID
+            Integer packageId = pkg.getId();
+
+            result.addProperty("msg", "Package successfully created.");
+            result.addProperty("id", packageId);
+
+            jsonResult = gson.toJson(result);
+
+        } catch (Exception e) {
+            // Handle exceptions (e.g., logging)
+            jsonResult = "{ \"msg\": \"Package creation failed\" }";
+            throw new RuntimeException(e);
+        }
+
+        return jsonResult;
     }
 
 }
