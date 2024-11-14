@@ -5,19 +5,15 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import jakarta.persistence.*;
-import model.Agent;
+import model.*;
 import model.Package;
-import model.Reward;
+import org.glassfish.jersey.internal.inject.Custom;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
-import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class TravelExpertsDB {
     private static String jsonResult = null;
@@ -49,24 +45,5 @@ public class TravelExpertsDB {
         Gson gson = new Gson();
         Type listType = new TypeToken<List<Agent>>(){}.getType();
         return gson.toJson(agentlist, listType);
-    }
-    public static String getRewards() {
-        EntityManagerFactory emf = createFactory();
-        EntityManager em = emf.createEntityManager();
-        Query q = em.createQuery("select r from Reward r");
-        List<Reward> rewardlist = q.getResultList();
-        Gson gson = new Gson();
-        Type listType = new TypeToken<List<Reward>>(){}.getType();
-        return gson.toJson(rewardlist, listType);
-    }
-
-    public static String getCustomerRewardsById(int customerId) {
-        EntityManagerFactory emf = createFactory();
-        EntityManager em = emf.createEntityManager();
-        Query q = em.createQuery("select c.id.customerId, c.id.rewardId, c.rwdNumber from CustomersReward c where c.customer.id = :customerId");
-        q.setParameter("customerId", customerId);
-        List customerRewardList = q.getResultList();
-        Gson gson = new Gson();
-        return gson.toJson(customerRewardList);
     }
 }

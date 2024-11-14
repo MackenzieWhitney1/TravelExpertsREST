@@ -1,9 +1,7 @@
 package com.group3.travelexpertsrest;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import data.RewardsDB;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/customer-reward")
@@ -12,6 +10,31 @@ public class CustomerRewardResource {
     @Path("get/{ customerId }")
     @Produces(MediaType.APPLICATION_JSON)
     public String getCustomerRewardsByCustomerId(@PathParam("customerId") int customerId) {
-        return TravelExpertsDB.getCustomerRewardsById(customerId);
+        return RewardsDB.getCustomerRewardsById(customerId);
+    }
+
+    @POST
+    @Path("post/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String postCustomerRewardRecord(String jsonString){
+        return RewardsDB.addCustomerReward(jsonString);
+    }
+
+    @PUT
+    @Path("put/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String putCustomerRewardRecord(String jsonString){
+        return RewardsDB.updateCustomerReward(jsonString);
+    }
+
+    @DELETE
+    @Path("delete/{customerId}/{rewardId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String deleteCustomerRewardRecord(
+            @PathParam("customerId") int customerId,
+            @PathParam("rewardId") int rewardId){
+        return RewardsDB.deleteCustomerReward(customerId, rewardId);
     }
 }
