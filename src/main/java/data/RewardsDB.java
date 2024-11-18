@@ -67,7 +67,9 @@ public class RewardsDB {
                 entityManager.getTransaction().begin();
                 entityManager.remove(customersReward);
                 entityManager.getTransaction().commit();
-                jsonResult = "{ \"msg\": \"Customer Reward deleted\" }";
+                Gson gson = new Gson();
+                result.addProperty("msg", "Customer Reward deleted successfully");
+                jsonResult = gson.toJson(result);
             }
         } catch (Exception e) {
             // Handle exceptions (e.g., logging)
@@ -92,7 +94,7 @@ public class RewardsDB {
             entityManager.getTransaction().commit();
 
             result.addProperty("msg", "Customer Reward successfully created.");
-
+            result.add("customerReward", jsonObject);
             jsonResult = gson.toJson(result);
 
         } catch (Exception e) {
@@ -141,7 +143,7 @@ public class RewardsDB {
 
         } catch (Exception e) {
             // Handle exceptions (e.g., logging)
-            jsonResult = "{ \"msg\": \"Package creation failed\" }";
+            jsonResult = "{ \"msg\": \"Customer Reward update failed\" }";
             throw new RuntimeException(e);
         }
 
