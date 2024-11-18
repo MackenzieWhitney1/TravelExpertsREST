@@ -29,6 +29,14 @@ public class CustomerRewardResource {
         return RewardsDB.updateCustomerReward(jsonString);
     }
 
+    @PUT
+    @Path("put/batch")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String putBatchCustomerRewardRecord(String jsonString){
+        return RewardsDB.batchUpdateCustomerRewards(jsonString);
+    }
+
     @DELETE
     @Path("delete/{customerId}/{rewardId}")
     @Produces(MediaType.APPLICATION_JSON)

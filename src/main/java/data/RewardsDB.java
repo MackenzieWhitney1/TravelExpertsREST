@@ -1,6 +1,8 @@
 package data;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.group3.travelexpertsrest.TravelExpertsDB;
@@ -149,4 +151,35 @@ public class RewardsDB {
 
         return jsonResult;
     }
+
+    public static String batchUpdateCustomerRewards(String jsonArrayString) {
+        String jsonResult;
+        try (EntityManagerFactory entityManagerFactory = TravelExpertsDB.createFactory();
+             EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+
+            Gson gson = new Gson();
+            JsonArray jsonArray = gson.fromJson(jsonArrayString, JsonArray.class);
+            JsonObject result = new JsonObject();
+
+            entityManager.getTransaction().begin();
+
+            for (JsonElement element : jsonArray) {
+                JsonObject jsonObject = element.getAsJsonObject();
+                CustomersReward customersReward = getCustomersReward(jsonObject, entityManager);
+                entityManager.merge(customersReward);
+            }
+
+            entityManager.getTransaction().commit();
+
+            result.addProperty("msg", "Batch update was successful!");  // Add the success message
+            jsonResult = gson.toJson(result);
+
+        } catch (Exception e) {
+            jsonResult = "{ \"msg\": \"Customer Reward update failed\" }";
+            throw new RuntimeException(e);
+        }
+
+        return jsonResult;
+    }
+
 }
