@@ -29,26 +29,26 @@ public class CustomersDB {
 
         Query query = entityManager.createQuery("select c from Customer c");
         List<Customer> customers = query.getResultList();
-        String jsonOut = "";
-        for(Customer customer : customers){
-            JsonObject json = new JsonObject();
-            json.addProperty("CustomerId",customer.getId());
-            json.addProperty("CustFirstName",customer.getCustFirstName());
-            json.addProperty("CustLastName",customer.getCustLastName());
-            json.addProperty("CustAddress",customer.getCustAddress());
-            json.addProperty("CustCity",customer.getCustCity());
-            json.addProperty("CustPostal",customer.getCustPostal());
-            json.addProperty("CustCountry",customer.getCustCountry());
-            json.addProperty("CustHomePhone",customer.getCustHomePhone());
-            json.addProperty("CustBusPhone",customer.getCustBusPhone());
-            json.addProperty("CustEmail",customer.getCustEmail());
-            json.addProperty("AgentId",customer.getAgent().getId());
-            jsonOut += json.toString();
-        }
-        //Gson gson = new Gson();
-//        Type type = new TypeToken<List<Customer>>(){}.getType();
+//        String jsonOut = "";
+//        for(Customer customer : customers){
+//            JsonObject json = new JsonObject();
+//            json.addProperty("CustomerId",customer.getId());
+//            json.addProperty("CustFirstName",customer.getCustFirstName());
+//            json.addProperty("CustLastName",customer.getCustLastName());
+//            json.addProperty("CustAddress",customer.getCustAddress());
+//            json.addProperty("CustCity",customer.getCustCity());
+//            json.addProperty("CustPostal",customer.getCustPostal());
+//            json.addProperty("CustCountry",customer.getCustCountry());
+//            json.addProperty("CustHomePhone",customer.getCustHomePhone());
+//            json.addProperty("CustBusPhone",customer.getCustBusPhone());
+//            json.addProperty("CustEmail",customer.getCustEmail());
+//            json.addProperty("AgentId",customer.getAgent().getId());
+//            jsonOut += json.toString();
+//        }
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Customer>>(){}.getType();
 
-        return jsonOut;//gson.toJson(customers, type);
+        return gson.toJson(customers, type);
     }
 
     public static String getCustomerById( int customerId) {
