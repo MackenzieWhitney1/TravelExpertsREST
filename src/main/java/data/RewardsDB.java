@@ -9,16 +9,14 @@ import com.group3.travelexpertsrest.TravelExpertsDB;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
-import model.Customer;
-import model.CustomersReward;
-import model.CustomersRewardId;
-import model.Reward;
+import model.*;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class RewardsDB {
     private static String jsonResult = null;
@@ -37,21 +35,19 @@ public class RewardsDB {
     public static String getCustomerRewardsById(int customerId) {
         EntityManagerFactory emf = TravelExpertsDB.createFactory();
         EntityManager em = emf.createEntityManager();
-        Query q = em.createQuery("select c.id.customerId, c.id.rewardId, c.rwdNumber from CustomersReward c where c.customer.id = :customerId");
+        Query q = em.createQuery("select c from CustomersReward c where c.customer.id = :customerId");
         q.setParameter("customerId", customerId);
 
-        List<?> customerRewardList = q.getResultList();
-        List<Map<String, Object>> formattedRewards = new ArrayList<>();
-        for (Object record : customerRewardList) {
-            Object[] fields = (Object[]) record;  // Cast each record to Object[]
-            Map<String, Object> rewardMap = new HashMap<>();
-            rewardMap.put("customerId", fields[0]);
-            rewardMap.put("rewardId", fields[1]);
-            rewardMap.put("rwdNumber", fields[2]);
-            formattedRewards.add(rewardMap);
-        }
+        List<CustomersReward> customerRewardList = q.getResultList();
+
+        List<CustomersRewardDTO> listCustomerRewardDTO = customerRewardList.stream().map(
+                cr -> new CustomersRewardDTO(
+                        cr.getId().getCustomerId(),
+                        cr.getId().getRewardId(),
+                        cr.getRwdNumber()
+                )).toList();
         Gson gson = new Gson();
-        return gson.toJson(formattedRewards);
+        return gson.toJson(listCustomerRewardDTO, listCustomerRewardDTO.getClass());
     }
 
     public static String deleteCustomerReward(int customerId, int rewardId) {
