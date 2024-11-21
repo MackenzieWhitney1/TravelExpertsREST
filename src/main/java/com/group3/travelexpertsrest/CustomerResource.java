@@ -43,14 +43,14 @@ public class CustomerResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("updatecustomer")
-    public String putPackage(String jsonString) {
+    public String updateCustomer(String jsonString) {
         return CustomersDB.updateCustomer(jsonString);
     }
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("deletecustomer/{customerId}")
-    public String deletePackage(@PathParam("customerId") int customerId) {
+    public String deleteCustomer(@PathParam("customerId") int customerId) {
         return CustomersDB.deleteCustomer(customerId);
     }
 

@@ -59,10 +59,10 @@ public class Customer {
     @NotNull
     @Column(name = "CustEmail", nullable = false, length = 50)
     private String custEmail;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "AgentId")
-    private Agent agent;
+    
+    @NotNull
+    @Column(name = "AgentId", nullable = false)
+    private Integer agentId;
 
     public Integer getId() {
         return id;
@@ -152,12 +152,12 @@ public class Customer {
         this.custEmail = custEmail;
     }
 
-    public Agent getAgent() {
-        return agent;
+    public Integer getAgentId() {
+        return agentId;
     }
 
-    public void setAgent(Agent agent) {
-        this.agent = agent;
+    public void setAgent(Integer agentId) {
+        this.agentId = agentId;
     }
 
 }
