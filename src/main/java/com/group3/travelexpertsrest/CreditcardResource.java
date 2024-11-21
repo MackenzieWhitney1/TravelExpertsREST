@@ -1,10 +1,8 @@
 package com.group3.travelexpertsrest;
 
+import com.google.gson.JsonObject;
 import data.CreditcardDB;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/creditcards")
@@ -21,4 +19,13 @@ public class CreditcardResource {
     public String getCustomerCreditcard(@PathParam("customerId") int customerId) {
         return CreditcardDB.getCustomerCreditcardsById(customerId);
     }
+    
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/post")
+    public String addCreditCard(String jsonString){
+        return CreditcardDB.addCreditCard(jsonString);
+    }
+    
 }
