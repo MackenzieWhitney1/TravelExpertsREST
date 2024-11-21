@@ -12,13 +12,13 @@ public class CreditcardResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getCreditcards() {
-        return CreditcardDB.getRewards();
+        return CreditcardDB.getAllCreditcards();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{creditcardId}")
-    public String getCustomerCreditcard(@PathParam("creditcardId") int creditcardId) {
-        return CreditcardDB.getCustomerCreditcardsById(creditcardId);
+    @Path("/{customerId}")
+    public String getCustomerCreditcard(@PathParam("customerId") int customerId) {
+        return CreditcardDB.getCustomerCreditcardsById(customerId);
     }
 }
