@@ -1,9 +1,10 @@
 package com.group3.travelexpertsrest;
 
-import com.google.gson.JsonObject;
 import data.CreditcardDB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+
+import java.text.ParseException;
 
 @Path("/creditcards")
 public class CreditcardResource {
@@ -24,8 +25,23 @@ public class CreditcardResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/post")
-    public String addCreditCard(String jsonString){
+    public String addCreditCard(String jsonString) throws ParseException {
         return CreditcardDB.addCreditCard(jsonString);
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/put")
+    public String updateCreditCard(String jsonString){
+        return CreditcardDB.updateCreditCard(jsonString);
+    }
+
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/delete/{creditCardId}")
+    public String deletePackage(@PathParam("creditCardId") int creditCardId) {
+        return CreditcardDB.deleteCreditCard(creditCardId);
     }
     
 }

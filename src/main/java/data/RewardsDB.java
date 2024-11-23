@@ -12,11 +12,7 @@ import jakarta.persistence.Query;
 import model.*;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class RewardsDB {
     private static String jsonResult = null;
